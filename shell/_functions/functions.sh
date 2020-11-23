@@ -76,6 +76,7 @@ klogs() {
 }
 
 config-apply() {
+
   cd ~/dev/packlink/k8s-manifests/
 
   is_up_to_date=$(git fetch --dry-run)
@@ -91,19 +92,19 @@ config-apply() {
 
 
 pretty-diff() {
-if (! git::is_in_repo); then
-  echo "Not in a git repo!"
-  exit 0
-fi
+  if (! git::is_in_repo); then
+    echo "Not in a git repo!"
+    exit 0
+  fi
 
-git -c color.status=always status --short |
-  fzf --height 100% --ansi \
-    --preview '(git diff HEAD --color=always -- {-1} | sed 1,4d)' \
-    --preview-window right:65% |
-  cut -c4- |
-  sed 's/.* -> //' |
-  tr -d '\n' |
-  pbcopy
+  git -c color.status=always status --short |
+    fzf --height 100% --ansi \
+      --preview '(git diff HEAD --color=always -- {-1} | sed 1,4d)' \
+      --preview-window right:65% |
+    cut -c4- |
+    sed 's/.* -> //' |
+    tr -d '\n' |
+    pbcopy
 }
 
 mkdotfile() {

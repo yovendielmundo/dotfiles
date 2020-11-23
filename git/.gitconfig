@@ -3,3 +3,5 @@
 [user]
 	name = Luis Osorio
 	email = yovendielmundo@gmail.com
+[core]
+	excludesfile = /Users/luis/.gitignore_global

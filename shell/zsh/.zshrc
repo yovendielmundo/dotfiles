@@ -1,7 +1,14 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
-source ~/.dotfiles/shell/bash/.exports
+DOTFILES_PATH="$HOME/.dotfiles"
+if [[ -d "$DOTFILES_PATH" ]] then
+    for export_source   in "$DOTFILES_PATH/shell/_exports/"*;   do source "$export_source";   done
+    for alias_source    in "$DOTFILES_PATH/shell/_aliases/"*;   do source "$alias_source";    done
+    for function_source in "$DOTFILES_PATH/shell/_functions/"*; do source "$function_source"; done
+fi
+
+
 
 # Path to your oh-my-zsh installation.
 export ZSH="/Users/luis/.oh-my-zsh"
@@ -110,13 +117,9 @@ if [ -f '/Users/luis/dev/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/luis/d
 # The next line enables shell command completion for gcloud.
 if [ -f '/Users/luis/dev/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/luis/dev/google-cloud-sdk/completion.zsh.inc'; fi
 
-# My custom functions
-source ~/.dotfiles/shell/bash/.custom_functions.sh
-
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
 
 export CLOUDSDK_PYTHON="/usr/local/opt/python@3.8/libexec/bin/python"
 source "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc"
 source "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc"
-
