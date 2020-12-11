@@ -18,7 +18,5 @@ PATH=$(
 
 export PATH
 
-export NEXUS_USERNAME=packlink
-export NEXUS_PASSWORD=ni0eRaphCieph7uo
 
    
