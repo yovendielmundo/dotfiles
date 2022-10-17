@@ -81,7 +81,7 @@ ZSH_DISABLE_COMPFIX="true"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git osx kubectl docker brew)
+plugins=(git macos kubectl docker brew)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -109,6 +109,7 @@ source $ZSH/oh-my-zsh.sh
 #
 # Example aliases
 alias zshconfig="vi ~/.zshrc"
+alias docker="podman"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 # The next line updates PATH for the Google Cloud SDK.
@@ -123,3 +124,5 @@ test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell
 export CLOUDSDK_PYTHON="/usr/local/opt/python@3.8/libexec/bin/python"
 source "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc"
 source "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc"
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

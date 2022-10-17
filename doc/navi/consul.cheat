@@ -1,0 +1,4 @@
+% consul-template
+
+# populate configuration
+consul-template -consul-addr localhost:8500 -template "./application.yml.ctmpl:./application.yml" -once

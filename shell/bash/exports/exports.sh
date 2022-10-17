@@ -1,4 +1,5 @@
 paths=(
+    "/Users/luis/.rust/cargo/bin"
     "/usr/local/opt/mysql-client/bin"
     "/usr/local/opt/openjdk/bin"
     "/usr/local/bin"

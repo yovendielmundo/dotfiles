@@ -1,15 +1,3 @@
-_docker_compose(){
-  docker-compose -f ~/dev/packlink/bootstrap/docker-compose/$1 ${@:2}
-}
-
-microservices(){
-   _docker_compose "microservices.yml" "$@"
-}
-
-infrastructure(){
-  _docker_compose "infrastructure.yml" "$@"
-}
-
 wopen(){
 	file_url=$1
 	file_name="/tmp/$(basename -- $file_url)"
@@ -18,10 +6,6 @@ wopen(){
 
 jshell(){
   /usr/libexec/java_home --exec jshell
-}
-
-grau(){
-  gra upstream $(git config --local --get remote.origin.url | sed 's/yovendielmundo/packlink-dev/g')
 }
 
 gpom(){
@@ -35,7 +19,7 @@ into(){
 
 
 show-merchant(){
-  echo $1 | base64 -Dd - | jq .
+  echo $1 > /tmp/client_nonce | base64 -d /tmp/client_nonce | jq .
 }
 
 consul-template-run(){
@@ -66,7 +50,7 @@ klogs() {
     if [[ -n $pod ]]; then
       pod_id=$(echo $pod | awk -F ': ' '{print $1}')
 
-      kubectl logs --tail=20 $pod_id && kubectl logs --tail=1 -f $pod_id | jq -c . || kubectl logs --tail=1 -f $pod_id 
+      kubectl logs --tail=30 "$pod_id" && kubectl logs --tail=1 -f "$pod_id" | jq -c . || kubectl logs --tail=1 -f "$pod_id"
     else
       echo "You haven't selected any pod! ༼つ◕_◕༽つ"
     fi
@@ -75,31 +59,46 @@ klogs() {
   fi
 }
 
-config-apply() {
 
-  cd ~/dev/packlink/k8s-manifests/
 
-  is_up_to_date=$(git fetch --dry-run)
 
-  if [[ -n $is_up_to_date ]]; then
-    git checkout master && git remote update && git pull upstream master || echo "There is a problem with the repo ༼つ◕_◕༽つ"
+kcontext() {
+  if kubectl get pods >/dev/null 2>&1; then
+    context=$(kubectl config get-contexts | awk '{if (NR!=1) print $3 ": \t[" $1 " " $2 "]"}' | fzf --height 40%)
+
+    if [[ -n $context ]]; then
+      context_id=$(echo $context | awk -F ': ' '{print $1}')
+
+      kubectl config use-context "$context_id" && echo "༼つಠ益ಠ༽つ ─=≡ΣO)) HADOUKEN!!!"
+    else
+      echo "You haven't selected any context! ༼つ◕_◕༽つ"
+    fi
   else
-    echo "Repo up to date! (ಠ_ಠ)" 
+    echo "Kubectl is not connected! (ಠ_ಠ)"
   fi
-
-  ./helpers/configctl.sh ${@:1}
 }
 
+kcopy() {
+  if kubectl get pods >/dev/null 2>&1; then
+    pod=$(kubectl get pods | awk '{if (NR!=1) print $1 ": \t\t[" $3 " " $2 "]"}' | fzf --height 40%)
+
+    if [[ -n $pod ]]; then
+      pod_id=$(echo "$pod" | awk -F ': ' '{print $1}')
+
+      file=$(kubectl exec --stdin --tty "$pod_id" -- ls -Flah | fzf --height 40%)
+      echo "You have selected $file"
+    else
+      echo "You haven't selected any pod! ༼つ◕_◕༽つ"
+    fi
+  else
+    echo "Kubectl is not connected! (ಠ_ಠ)"
+  fi
+}
 
 pretty-diff() {
-  if (! git::is_in_repo); then
-    echo "Not in a git repo!"
-    exit 0
-  fi
-
   git -c color.status=always status --short |
     fzf --height 100% --ansi \
-      --preview '(git diff HEAD --color=always -- {-1} | sed 1,4d)' \
+      --preview 'git diff HEAD --color=always -- {-1} | sed 1,4d' \
       --preview-window right:65% |
     cut -c4- |
     sed 's/.* -> //' |
@@ -118,4 +117,15 @@ mkdotfile() {
   fi
   
 }
+
+robo-3t() {
+  if [[ -n $1 ]]; then
+    QT_FONT_DPI=128 QT_SCALE_FACTOR=$1 /usr/local/Caskroom/robo-3t/1.4.3,48f7dfd/Robo\ 3T.app/Contents/MacOS/Robo\ 3T \
+    || echo "You have choosen a wrong QT_SCALE_FACTOR=$1 ༼つ◕_◕༽つ"
+  else
+    QT_FONT_DPI=128 /usr/local/Caskroom/robo-3t/1.4.3,48f7dfd/Robo\ 3T.app/Contents/MacOS/Robo\ 3T
+  fi
+}
+
+
 

@@ -2,4 +2,7 @@
 
 .DS_Store
 
-/**/**/private-*
+/**/**/_*
+private/
+
+dumps/
