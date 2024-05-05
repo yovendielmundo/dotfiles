@@ -5,6 +5,7 @@
 	email = yovendielmundo@gmail.com
 [core]
 	excludesfile = /Users/luis/.gitignore_global
+	autocrlf = input
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
